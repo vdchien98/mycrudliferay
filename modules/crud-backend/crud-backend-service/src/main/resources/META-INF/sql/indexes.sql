@@ -1,0 +1,1 @@
+create index IX_97F979E0 on CR_CRUD (uuid_[$COLUMN_LENGTH:75$]);

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="crud.backend.model.CRUD">
+		<field name="uuid" type="String" />
+		<field name="crudId" type="long" />
+		<field name="name" type="String" />
+		<field name="department" type="String" />
+		<field name="phone" type="String" />
+		<field name="email" type="String" />
+		<field name="message" type="String" />
+	</model>
+</model-hints>

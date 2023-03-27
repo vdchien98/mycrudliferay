@@ -1,0 +1,10 @@
+Bundle-Name: crud-backend-api
+Bundle-SymbolicName: crud.backend.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	crud.backend.exception,\
+	crud.backend.model,\
+	crud.backend.service,\
+	crud.backend.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../crud-backend-service/service.xml

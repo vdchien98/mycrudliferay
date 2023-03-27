@@ -1,0 +1,4 @@
+Bundle-Name: crud-web
+Bundle-SymbolicName: crud_web.portlet
+Bundle-Version: 1.0.0
+Export-Package: crud_web.portlet.constants
