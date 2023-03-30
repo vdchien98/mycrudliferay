@@ -32,43 +32,61 @@ import crud.backend.model.CRUD;
 import crud.backend.service.CRUDLocalService;
 import crud.backend.service.base.CRUDLocalServiceBaseImpl;
 
-
 /**
  * @author liferay
  */
-@Component(
-	property = "model.class.name=crud.backend.model.CRUD",
-	service = AopService.class
-)
-
+@Component(property = "model.class.name=crud.backend.model.CRUD", service = AopService.class)
 
 //long crudId, String name, String email,String phone, String message,String department , ServiceContext serviceContext
 
 public class CRUDLocalServiceImpl extends CRUDLocalServiceBaseImpl {
-       public CRUD addCRUD(String name, String department, String phone,String email, String message ,ServiceContext serviceContext) throws PortalException {  	   
-    	   long crudId = counterLocalService.increment();
-    	   CRUD crud = crudPersistence.create(crudId);
-    	   crud.setUuid(serviceContext.getUuid());
-    	   crud.setName(name);
-	      crud.setDepartment(department);
-	      crud.setPhone(phone);
-	      crud.setEmail(email);
-	      crud.setMessage(message);
-          System.out.println("******* crudId la "+ crudId);
-  
-          crudPersistence.update(crud);	     
-          return crud;
-       }
-      public CRUD updateCRUD (long crudId,String name, String department, String phone , String email, String message, ServiceContext serviceContext) throws PortalException,SystemException {
-    	  CRUD crud = getCRUD(crudId);
-    	  crud.setName(name);
-	      crud.setDepartment(department);
-	      crud.setPhone(phone);
-	      crud.setEmail(email);
-	      crud.setMessage(message);
-	      crud.setExpandoBridgeAttributes(serviceContext);
-	      System.out.println("******* upadte la "+ crudId);
-	      crudPersistence.update(crud);
-	      return crud;
-      }
+	public CRUD addCRUD(String name, String department, String phone, String email, String message,
+			ServiceContext serviceContext) throws PortalException {
+		long groupId = serviceContext.getScopeGroupId();
+		long crudId = counterLocalService.increment();
+		CRUD crud = crudPersistence.create(crudId);
+		crud.setUuid(serviceContext.getUuid());
+		crud.setName(name);
+		crud.setGroupId(groupId);
+		crud.setDepartment(department);
+		crud.setPhone(phone);
+		crud.setEmail(email);
+		crud.setMessage(message);
+		System.out.println("******* crudId la " + crudId);
+
+		crudPersistence.update(crud);
+		return crud;
+	}
+
+	public CRUD updateCRUD(long crudId, String name, String department, String phone, String email, String message,
+			ServiceContext serviceContext) throws PortalException, SystemException {
+		CRUD crud = getCRUD(crudId);
+		crud.setName(name);
+		crud.setDepartment(department);
+		crud.setPhone(phone);
+		crud.setEmail(email);
+		crud.setMessage(message);
+		crud.setExpandoBridgeAttributes(serviceContext);
+		System.out.println("******* upadte la " + crudId);
+		crudPersistence.update(crud);
+		return crud;
+	}
+
+	public List<CRUD> getEntriesCRUD(long groupId, int start, int end) throws SystemException {
+		return crudPersistence.findByG_G(groupId, start, end);
+	}
+
+	public List<CRUD> getEntries(long groupId, int start, int end) throws SystemException {
+		return crudPersistence.findByG_G(groupId, start, end);
+	}
+
+	public List<CRUD> getEntriesCRUD(long groupId, int start, int end, OrderByComparator<CRUD> obc) {
+
+		return crudPersistence.findByG_G(groupId, start, end, obc);
+	}
+
+	public int getEntriesCRUDCount(long groupId) {
+		return crudPersistence.countByG_G(groupId);
+	}
+
 }

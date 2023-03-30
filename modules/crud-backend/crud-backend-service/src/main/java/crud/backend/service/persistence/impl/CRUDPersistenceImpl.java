@@ -619,46 +619,294 @@ public class CRUDPersistenceImpl
 	private static final String _FINDER_COLUMN_UUID_UUID_3 =
 		"(crud.uuid IS NULL OR crud.uuid = '')";
 
+	private FinderPath _finderPathFetchByUUID_G;
+	private FinderPath _finderPathCountByUUID_G;
+
+	/**
+	 * Returns the crud where uuid = &#63; and groupId = &#63; or throws a <code>NoSuchUDException</code> if it could not be found.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the matching crud
+	 * @throws NoSuchUDException if a matching crud could not be found
+	 */
+	@Override
+	public CRUD findByUUID_G(String uuid, long groupId)
+		throws NoSuchUDException {
+
+		CRUD crud = fetchByUUID_G(uuid, groupId);
+
+		if (crud == null) {
+			StringBundler sb = new StringBundler(6);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("uuid=");
+			sb.append(uuid);
+
+			sb.append(", groupId=");
+			sb.append(groupId);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchUDException(sb.toString());
+		}
+
+		return crud;
+	}
+
+	/**
+	 * Returns the crud where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the matching crud, or <code>null</code> if a matching crud could not be found
+	 */
+	@Override
+	public CRUD fetchByUUID_G(String uuid, long groupId) {
+		return fetchByUUID_G(uuid, groupId, true);
+	}
+
+	/**
+	 * Returns the crud where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching crud, or <code>null</code> if a matching crud could not be found
+	 */
+	@Override
+	public CRUD fetchByUUID_G(
+		String uuid, long groupId, boolean useFinderCache) {
+
+		uuid = Objects.toString(uuid, "");
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {uuid, groupId};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByUUID_G, finderArgs);
+		}
+
+		if (result instanceof CRUD) {
+			CRUD crud = (CRUD)result;
+
+			if (!Objects.equals(uuid, crud.getUuid()) ||
+				(groupId != crud.getGroupId())) {
+
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_SELECT_CRUD_WHERE);
+
+			boolean bindUuid = false;
+
+			if (uuid.isEmpty()) {
+				sb.append(_FINDER_COLUMN_UUID_G_UUID_3);
+			}
+			else {
+				bindUuid = true;
+
+				sb.append(_FINDER_COLUMN_UUID_G_UUID_2);
+			}
+
+			sb.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindUuid) {
+					queryPos.add(uuid);
+				}
+
+				queryPos.add(groupId);
+
+				List<CRUD> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByUUID_G, finderArgs, list);
+					}
+				}
+				else {
+					CRUD crud = list.get(0);
+
+					result = crud;
+
+					cacheResult(crud);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (CRUD)result;
+		}
+	}
+
+	/**
+	 * Removes the crud where uuid = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the crud that was removed
+	 */
+	@Override
+	public CRUD removeByUUID_G(String uuid, long groupId)
+		throws NoSuchUDException {
+
+		CRUD crud = findByUUID_G(uuid, groupId);
+
+		return remove(crud);
+	}
+
+	/**
+	 * Returns the number of cruds where uuid = &#63; and groupId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the number of matching cruds
+	 */
+	@Override
+	public int countByUUID_G(String uuid, long groupId) {
+		uuid = Objects.toString(uuid, "");
+
+		FinderPath finderPath = _finderPathCountByUUID_G;
+
+		Object[] finderArgs = new Object[] {uuid, groupId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_CRUD_WHERE);
+
+			boolean bindUuid = false;
+
+			if (uuid.isEmpty()) {
+				sb.append(_FINDER_COLUMN_UUID_G_UUID_3);
+			}
+			else {
+				bindUuid = true;
+
+				sb.append(_FINDER_COLUMN_UUID_G_UUID_2);
+			}
+
+			sb.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindUuid) {
+					queryPos.add(uuid);
+				}
+
+				queryPos.add(groupId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_G_UUID_2 =
+		"crud.uuid = ? AND ";
+
+	private static final String _FINDER_COLUMN_UUID_G_UUID_3 =
+		"(crud.uuid IS NULL OR crud.uuid = '') AND ";
+
+	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 =
+		"crud.groupId = ?";
+
 	private FinderPath _finderPathWithPaginationFindByG_G;
 	private FinderPath _finderPathWithoutPaginationFindByG_G;
 	private FinderPath _finderPathCountByG_G;
 
 	/**
-	 * Returns all the cruds where crudId = &#63;.
+	 * Returns all the cruds where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @return the matching cruds
 	 */
 	@Override
-	public List<CRUD> findByG_G(long crudId) {
-		return findByG_G(crudId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	public List<CRUD> findByG_G(long groupId) {
+		return findByG_G(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the cruds where crudId = &#63;.
+	 * Returns a range of all the cruds where groupId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CRUDModelImpl</code>.
 	 * </p>
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param start the lower bound of the range of cruds
 	 * @param end the upper bound of the range of cruds (not inclusive)
 	 * @return the range of matching cruds
 	 */
 	@Override
-	public List<CRUD> findByG_G(long crudId, int start, int end) {
-		return findByG_G(crudId, start, end, null);
+	public List<CRUD> findByG_G(long groupId, int start, int end) {
+		return findByG_G(groupId, start, end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the cruds where crudId = &#63;.
+	 * Returns an ordered range of all the cruds where groupId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CRUDModelImpl</code>.
 	 * </p>
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param start the lower bound of the range of cruds
 	 * @param end the upper bound of the range of cruds (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -666,20 +914,20 @@ public class CRUDPersistenceImpl
 	 */
 	@Override
 	public List<CRUD> findByG_G(
-		long crudId, int start, int end,
+		long groupId, int start, int end,
 		OrderByComparator<CRUD> orderByComparator) {
 
-		return findByG_G(crudId, start, end, orderByComparator, true);
+		return findByG_G(groupId, start, end, orderByComparator, true);
 	}
 
 	/**
-	 * Returns an ordered range of all the cruds where crudId = &#63;.
+	 * Returns an ordered range of all the cruds where groupId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CRUDModelImpl</code>.
 	 * </p>
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param start the lower bound of the range of cruds
 	 * @param end the upper bound of the range of cruds (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -688,7 +936,7 @@ public class CRUDPersistenceImpl
 	 */
 	@Override
 	public List<CRUD> findByG_G(
-		long crudId, int start, int end,
+		long groupId, int start, int end,
 		OrderByComparator<CRUD> orderByComparator, boolean useFinderCache) {
 
 		FinderPath finderPath = null;
@@ -699,12 +947,12 @@ public class CRUDPersistenceImpl
 
 			if (useFinderCache) {
 				finderPath = _finderPathWithoutPaginationFindByG_G;
-				finderArgs = new Object[] {crudId};
+				finderArgs = new Object[] {groupId};
 			}
 		}
 		else if (useFinderCache) {
 			finderPath = _finderPathWithPaginationFindByG_G;
-			finderArgs = new Object[] {crudId, start, end, orderByComparator};
+			finderArgs = new Object[] {groupId, start, end, orderByComparator};
 		}
 
 		List<CRUD> list = null;
@@ -714,7 +962,7 @@ public class CRUDPersistenceImpl
 
 			if ((list != null) && !list.isEmpty()) {
 				for (CRUD crud : list) {
-					if (crudId != crud.getCrudId()) {
+					if (groupId != crud.getGroupId()) {
 						list = null;
 
 						break;
@@ -736,7 +984,7 @@ public class CRUDPersistenceImpl
 
 			sb.append(_SQL_SELECT_CRUD_WHERE);
 
-			sb.append(_FINDER_COLUMN_G_G_CRUDID_2);
+			sb.append(_FINDER_COLUMN_G_G_GROUPID_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(
@@ -757,7 +1005,7 @@ public class CRUDPersistenceImpl
 
 				QueryPos queryPos = QueryPos.getInstance(query);
 
-				queryPos.add(crudId);
+				queryPos.add(groupId);
 
 				list = (List<CRUD>)QueryUtil.list(
 					query, getDialect(), start, end);
@@ -780,19 +1028,19 @@ public class CRUDPersistenceImpl
 	}
 
 	/**
-	 * Returns the first crud in the ordered set where crudId = &#63;.
+	 * Returns the first crud in the ordered set where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching crud
 	 * @throws NoSuchUDException if a matching crud could not be found
 	 */
 	@Override
 	public CRUD findByG_G_First(
-			long crudId, OrderByComparator<CRUD> orderByComparator)
+			long groupId, OrderByComparator<CRUD> orderByComparator)
 		throws NoSuchUDException {
 
-		CRUD crud = fetchByG_G_First(crudId, orderByComparator);
+		CRUD crud = fetchByG_G_First(groupId, orderByComparator);
 
 		if (crud != null) {
 			return crud;
@@ -802,8 +1050,8 @@ public class CRUDPersistenceImpl
 
 		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-		sb.append("crudId=");
-		sb.append(crudId);
+		sb.append("groupId=");
+		sb.append(groupId);
 
 		sb.append("}");
 
@@ -811,17 +1059,17 @@ public class CRUDPersistenceImpl
 	}
 
 	/**
-	 * Returns the first crud in the ordered set where crudId = &#63;.
+	 * Returns the first crud in the ordered set where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching crud, or <code>null</code> if a matching crud could not be found
 	 */
 	@Override
 	public CRUD fetchByG_G_First(
-		long crudId, OrderByComparator<CRUD> orderByComparator) {
+		long groupId, OrderByComparator<CRUD> orderByComparator) {
 
-		List<CRUD> list = findByG_G(crudId, 0, 1, orderByComparator);
+		List<CRUD> list = findByG_G(groupId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -831,19 +1079,19 @@ public class CRUDPersistenceImpl
 	}
 
 	/**
-	 * Returns the last crud in the ordered set where crudId = &#63;.
+	 * Returns the last crud in the ordered set where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching crud
 	 * @throws NoSuchUDException if a matching crud could not be found
 	 */
 	@Override
 	public CRUD findByG_G_Last(
-			long crudId, OrderByComparator<CRUD> orderByComparator)
+			long groupId, OrderByComparator<CRUD> orderByComparator)
 		throws NoSuchUDException {
 
-		CRUD crud = fetchByG_G_Last(crudId, orderByComparator);
+		CRUD crud = fetchByG_G_Last(groupId, orderByComparator);
 
 		if (crud != null) {
 			return crud;
@@ -853,8 +1101,8 @@ public class CRUDPersistenceImpl
 
 		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-		sb.append("crudId=");
-		sb.append(crudId);
+		sb.append("groupId=");
+		sb.append(groupId);
 
 		sb.append("}");
 
@@ -862,24 +1110,24 @@ public class CRUDPersistenceImpl
 	}
 
 	/**
-	 * Returns the last crud in the ordered set where crudId = &#63;.
+	 * Returns the last crud in the ordered set where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching crud, or <code>null</code> if a matching crud could not be found
 	 */
 	@Override
 	public CRUD fetchByG_G_Last(
-		long crudId, OrderByComparator<CRUD> orderByComparator) {
+		long groupId, OrderByComparator<CRUD> orderByComparator) {
 
-		int count = countByG_G(crudId);
+		int count = countByG_G(groupId);
 
 		if (count == 0) {
 			return null;
 		}
 
 		List<CRUD> list = findByG_G(
-			crudId, count - 1, count, orderByComparator);
+			groupId, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -889,30 +1137,181 @@ public class CRUDPersistenceImpl
 	}
 
 	/**
-	 * Removes all the cruds where crudId = &#63; from the database.
+	 * Returns the cruds before and after the current crud in the ordered set where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param crudId the primary key of the current crud
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next crud
+	 * @throws NoSuchUDException if a crud with the primary key could not be found
 	 */
 	@Override
-	public void removeByG_G(long crudId) {
+	public CRUD[] findByG_G_PrevAndNext(
+			long crudId, long groupId,
+			OrderByComparator<CRUD> orderByComparator)
+		throws NoSuchUDException {
+
+		CRUD crud = findByPrimaryKey(crudId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			CRUD[] array = new CRUDImpl[3];
+
+			array[0] = getByG_G_PrevAndNext(
+				session, crud, groupId, orderByComparator, true);
+
+			array[1] = crud;
+
+			array[2] = getByG_G_PrevAndNext(
+				session, crud, groupId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected CRUD getByG_G_PrevAndNext(
+		Session session, CRUD crud, long groupId,
+		OrderByComparator<CRUD> orderByComparator, boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(3);
+		}
+
+		sb.append(_SQL_SELECT_CRUD_WHERE);
+
+		sb.append(_FINDER_COLUMN_G_G_GROUPID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(CRUDModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(groupId);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(crud)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<CRUD> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the cruds where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 */
+	@Override
+	public void removeByG_G(long groupId) {
 		for (CRUD crud :
-				findByG_G(crudId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+				findByG_G(
+					groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 
 			remove(crud);
 		}
 	}
 
 	/**
-	 * Returns the number of cruds where crudId = &#63;.
+	 * Returns the number of cruds where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @return the number of matching cruds
 	 */
 	@Override
-	public int countByG_G(long crudId) {
+	public int countByG_G(long groupId) {
 		FinderPath finderPath = _finderPathCountByG_G;
 
-		Object[] finderArgs = new Object[] {crudId};
+		Object[] finderArgs = new Object[] {groupId};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
 
@@ -921,7 +1320,7 @@ public class CRUDPersistenceImpl
 
 			sb.append(_SQL_COUNT_CRUD_WHERE);
 
-			sb.append(_FINDER_COLUMN_G_G_CRUDID_2);
+			sb.append(_FINDER_COLUMN_G_G_GROUPID_2);
 
 			String sql = sb.toString();
 
@@ -934,7 +1333,7 @@ public class CRUDPersistenceImpl
 
 				QueryPos queryPos = QueryPos.getInstance(query);
 
-				queryPos.add(crudId);
+				queryPos.add(groupId);
 
 				count = (Long)query.uniqueResult();
 
@@ -951,7 +1350,8 @@ public class CRUDPersistenceImpl
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_G_G_CRUDID_2 = "crud.crudId = ?";
+	private static final String _FINDER_COLUMN_G_G_GROUPID_2 =
+		"crud.groupId = ?";
 
 	public CRUDPersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
@@ -976,6 +1376,10 @@ public class CRUDPersistenceImpl
 	@Override
 	public void cacheResult(CRUD crud) {
 		entityCache.putResult(CRUDImpl.class, crud.getPrimaryKey(), crud);
+
+		finderCache.putResult(
+			_finderPathFetchByUUID_G,
+			new Object[] {crud.getUuid(), crud.getGroupId()}, crud);
 	}
 
 	private int _valueObjectFinderCacheListThreshold;
@@ -1043,6 +1447,15 @@ public class CRUDPersistenceImpl
 		for (Serializable primaryKey : primaryKeys) {
 			entityCache.removeResult(CRUDImpl.class, primaryKey);
 		}
+	}
+
+	protected void cacheUniqueFindersCache(CRUDModelImpl crudModelImpl) {
+		Object[] args = new Object[] {
+			crudModelImpl.getUuid(), crudModelImpl.getGroupId()
+		};
+
+		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
+		finderCache.putResult(_finderPathFetchByUUID_G, args, crudModelImpl);
 	}
 
 	/**
@@ -1193,6 +1606,8 @@ public class CRUDPersistenceImpl
 		}
 
 		entityCache.putResult(CRUDImpl.class, crudModelImpl, false, true);
+
+		cacheUniqueFindersCache(crudModelImpl);
 
 		if (isNew) {
 			crud.setNew(false);
@@ -1492,21 +1907,32 @@ public class CRUDPersistenceImpl
 			new String[] {String.class.getName()}, new String[] {"uuid_"},
 			false);
 
+		_finderPathFetchByUUID_G = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
+			new String[] {String.class.getName(), Long.class.getName()},
+			new String[] {"uuid_", "groupId"}, true);
+
+		_finderPathCountByUUID_G = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] {String.class.getName(), Long.class.getName()},
+			new String[] {"uuid_", "groupId"}, false);
+
 		_finderPathWithPaginationFindByG_G = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_G",
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
 				Integer.class.getName(), OrderByComparator.class.getName()
 			},
-			new String[] {"crudId"}, true);
+			new String[] {"groupId"}, true);
 
 		_finderPathWithoutPaginationFindByG_G = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_G",
-			new String[] {Long.class.getName()}, new String[] {"crudId"}, true);
+			new String[] {Long.class.getName()}, new String[] {"groupId"},
+			true);
 
 		_finderPathCountByG_G = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_G",
-			new String[] {Long.class.getName()}, new String[] {"crudId"},
+			new String[] {Long.class.getName()}, new String[] {"groupId"},
 			false);
 
 		_setCRUDUtilPersistence(this);

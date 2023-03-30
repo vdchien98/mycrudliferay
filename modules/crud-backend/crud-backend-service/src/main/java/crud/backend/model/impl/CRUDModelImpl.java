@@ -68,10 +68,10 @@ public class CRUDModelImpl extends BaseModelImpl<CRUD> implements CRUDModel {
 	public static final String TABLE_NAME = "CR_CRUD";
 
 	public static final Object[][] TABLE_COLUMNS = {
-		{"uuid_", Types.VARCHAR}, {"crudId", Types.BIGINT},
-		{"name", Types.VARCHAR}, {"department", Types.VARCHAR},
-		{"phone", Types.VARCHAR}, {"email", Types.VARCHAR},
-		{"message", Types.VARCHAR}
+		{"uuid_", Types.VARCHAR}, {"groupId", Types.BIGINT},
+		{"crudId", Types.BIGINT}, {"name", Types.VARCHAR},
+		{"department", Types.VARCHAR}, {"phone", Types.VARCHAR},
+		{"email", Types.VARCHAR}, {"message", Types.VARCHAR}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -79,6 +79,7 @@ public class CRUDModelImpl extends BaseModelImpl<CRUD> implements CRUDModel {
 
 	static {
 		TABLE_COLUMNS_MAP.put("uuid_", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("groupId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("crudId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("name", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("department", Types.VARCHAR);
@@ -88,7 +89,7 @@ public class CRUDModelImpl extends BaseModelImpl<CRUD> implements CRUDModel {
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table CR_CRUD (uuid_ VARCHAR(75) null,crudId LONG not null primary key,name VARCHAR(75) null,department VARCHAR(75) null,phone VARCHAR(75) null,email VARCHAR(75) null,message VARCHAR(75) null)";
+		"create table CR_CRUD (uuid_ VARCHAR(75) null,groupId LONG,crudId LONG not null primary key,name VARCHAR(75) null,department VARCHAR(75) null,phone VARCHAR(75) null,email VARCHAR(75) null,message VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP = "drop table CR_CRUD";
 
@@ -106,13 +107,20 @@ public class CRUDModelImpl extends BaseModelImpl<CRUD> implements CRUDModel {
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long CRUDID_COLUMN_BITMASK = 1L;
+	public static final long GROUPID_COLUMN_BITMASK = 1L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
 	public static final long UUID_COLUMN_BITMASK = 2L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *		#getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long CRUDID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -222,6 +230,9 @@ public class CRUDModelImpl extends BaseModelImpl<CRUD> implements CRUDModel {
 		attributeGetterFunctions.put("uuid", CRUD::getUuid);
 		attributeSetterBiConsumers.put(
 			"uuid", (BiConsumer<CRUD, String>)CRUD::setUuid);
+		attributeGetterFunctions.put("groupId", CRUD::getGroupId);
+		attributeSetterBiConsumers.put(
+			"groupId", (BiConsumer<CRUD, Long>)CRUD::setGroupId);
 		attributeGetterFunctions.put("crudId", CRUD::getCrudId);
 		attributeSetterBiConsumers.put(
 			"crudId", (BiConsumer<CRUD, Long>)CRUD::setCrudId);
@@ -278,6 +289,30 @@ public class CRUDModelImpl extends BaseModelImpl<CRUD> implements CRUDModel {
 
 	@JSON
 	@Override
+	public long getGroupId() {
+		return _groupId;
+	}
+
+	@Override
+	public void setGroupId(long groupId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_groupId = groupId;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public long getOriginalGroupId() {
+		return GetterUtil.getLong(this.<Long>getColumnOriginalValue("groupId"));
+	}
+
+	@JSON
+	@Override
 	public long getCrudId() {
 		return _crudId;
 	}
@@ -289,15 +324,6 @@ public class CRUDModelImpl extends BaseModelImpl<CRUD> implements CRUDModel {
 		}
 
 		_crudId = crudId;
-	}
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #getColumnOriginalValue(String)}
-	 */
-	@Deprecated
-	public long getOriginalCrudId() {
-		return GetterUtil.getLong(this.<Long>getColumnOriginalValue("crudId"));
 	}
 
 	@JSON
@@ -457,6 +483,7 @@ public class CRUDModelImpl extends BaseModelImpl<CRUD> implements CRUDModel {
 		CRUDImpl crudImpl = new CRUDImpl();
 
 		crudImpl.setUuid(getUuid());
+		crudImpl.setGroupId(getGroupId());
 		crudImpl.setCrudId(getCrudId());
 		crudImpl.setName(getName());
 		crudImpl.setDepartment(getDepartment());
@@ -474,6 +501,7 @@ public class CRUDModelImpl extends BaseModelImpl<CRUD> implements CRUDModel {
 		CRUDImpl crudImpl = new CRUDImpl();
 
 		crudImpl.setUuid(this.<String>getColumnOriginalValue("uuid_"));
+		crudImpl.setGroupId(this.<Long>getColumnOriginalValue("groupId"));
 		crudImpl.setCrudId(this.<Long>getColumnOriginalValue("crudId"));
 		crudImpl.setName(this.<String>getColumnOriginalValue("name"));
 		crudImpl.setDepartment(
@@ -563,6 +591,8 @@ public class CRUDModelImpl extends BaseModelImpl<CRUD> implements CRUDModel {
 		if ((uuid != null) && (uuid.length() == 0)) {
 			crudCacheModel.uuid = null;
 		}
+
+		crudCacheModel.groupId = getGroupId();
 
 		crudCacheModel.crudId = getCrudId();
 
@@ -697,6 +727,7 @@ public class CRUDModelImpl extends BaseModelImpl<CRUD> implements CRUDModel {
 	}
 
 	private String _uuid;
+	private long _groupId;
 	private long _crudId;
 	private String _name;
 	private String _department;
@@ -734,6 +765,7 @@ public class CRUDModelImpl extends BaseModelImpl<CRUD> implements CRUDModel {
 		_columnOriginalValues = new HashMap<String, Object>();
 
 		_columnOriginalValues.put("uuid_", _uuid);
+		_columnOriginalValues.put("groupId", _groupId);
 		_columnOriginalValues.put("crudId", _crudId);
 		_columnOriginalValues.put("name", _name);
 		_columnOriginalValues.put("department", _department);
@@ -765,17 +797,19 @@ public class CRUDModelImpl extends BaseModelImpl<CRUD> implements CRUDModel {
 
 		columnBitmasks.put("uuid_", 1L);
 
-		columnBitmasks.put("crudId", 2L);
+		columnBitmasks.put("groupId", 2L);
 
-		columnBitmasks.put("name", 4L);
+		columnBitmasks.put("crudId", 4L);
 
-		columnBitmasks.put("department", 8L);
+		columnBitmasks.put("name", 8L);
 
-		columnBitmasks.put("phone", 16L);
+		columnBitmasks.put("department", 16L);
 
-		columnBitmasks.put("email", 32L);
+		columnBitmasks.put("phone", 32L);
 
-		columnBitmasks.put("message", 64L);
+		columnBitmasks.put("email", 64L);
+
+		columnBitmasks.put("message", 128L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

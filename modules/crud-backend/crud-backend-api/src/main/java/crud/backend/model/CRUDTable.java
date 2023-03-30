@@ -32,6 +32,8 @@ public class CRUDTable extends BaseTable<CRUDTable> {
 
 	public final Column<CRUDTable, String> uuid = createColumn(
 		"uuid_", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<CRUDTable, Long> groupId = createColumn(
+		"groupId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<CRUDTable, Long> crudId = createColumn(
 		"crudId", Long.class, Types.BIGINT, Column.FLAG_PRIMARY);
 	public final Column<CRUDTable, String> name = createColumn(

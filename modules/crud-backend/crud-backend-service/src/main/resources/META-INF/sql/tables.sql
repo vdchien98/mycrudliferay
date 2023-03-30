@@ -1,5 +1,6 @@
 create table CR_CRUD (
 	uuid_ VARCHAR(75) null,
+	groupId LONG,
 	crudId LONG not null primary key,
 	name VARCHAR(75) null,
 	department VARCHAR(75) null,

@@ -206,6 +206,16 @@ public interface CRUDLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CRUD fetchCRUD(long crudId);
 
+	/**
+	 * Returns the crud matching the UUID and group.
+	 *
+	 * @param uuid the crud's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching crud, or <code>null</code> if a matching crud could not be found
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public CRUD fetchCRUDByUuidAndGroupId(String uuid, long groupId);
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
@@ -218,6 +228,18 @@ public interface CRUDLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CRUD getCRUD(long crudId) throws PortalException;
+
+	/**
+	 * Returns the crud matching the UUID and group.
+	 *
+	 * @param uuid the crud's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching crud
+	 * @throws PortalException if a matching crud could not be found
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public CRUD getCRUDByUuidAndGroupId(String uuid, long groupId)
+		throws PortalException;
 
 	/**
 	 * Returns a range of all the cruds.
@@ -240,6 +262,21 @@ public interface CRUDLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCRUDsCount();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CRUD> getEntries(long groupId, int start, int end)
+		throws SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CRUD> getEntriesCRUD(long groupId, int start, int end)
+		throws SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CRUD> getEntriesCRUD(
+		long groupId, int start, int end, OrderByComparator<CRUD> obc);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getEntriesCRUDCount(long groupId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();

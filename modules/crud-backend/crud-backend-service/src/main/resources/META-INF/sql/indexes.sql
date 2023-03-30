@@ -1,1 +1,2 @@
-create index IX_97F979E0 on CR_CRUD (uuid_[$COLUMN_LENGTH:75$]);
+create index IX_878769D6 on CR_CRUD (groupId);
+create unique index IX_696716CA on CR_CRUD (uuid_[$COLUMN_LENGTH:75$], groupId);

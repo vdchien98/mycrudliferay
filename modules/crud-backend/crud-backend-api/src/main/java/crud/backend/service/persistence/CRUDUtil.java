@@ -277,60 +277,123 @@ public class CRUDUtil {
 	}
 
 	/**
-	 * Returns all the cruds where crudId = &#63;.
+	 * Returns the crud where uuid = &#63; and groupId = &#63; or throws a <code>NoSuchUDException</code> if it could not be found.
 	 *
-	 * @param crudId the crud ID
-	 * @return the matching cruds
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the matching crud
+	 * @throws NoSuchUDException if a matching crud could not be found
 	 */
-	public static List<CRUD> findByG_G(long crudId) {
-		return getPersistence().findByG_G(crudId);
+	public static CRUD findByUUID_G(String uuid, long groupId)
+		throws crud.backend.exception.NoSuchUDException {
+
+		return getPersistence().findByUUID_G(uuid, groupId);
 	}
 
 	/**
-	 * Returns a range of all the cruds where crudId = &#63;.
+	 * Returns the crud where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the matching crud, or <code>null</code> if a matching crud could not be found
+	 */
+	public static CRUD fetchByUUID_G(String uuid, long groupId) {
+		return getPersistence().fetchByUUID_G(uuid, groupId);
+	}
+
+	/**
+	 * Returns the crud where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching crud, or <code>null</code> if a matching crud could not be found
+	 */
+	public static CRUD fetchByUUID_G(
+		String uuid, long groupId, boolean useFinderCache) {
+
+		return getPersistence().fetchByUUID_G(uuid, groupId, useFinderCache);
+	}
+
+	/**
+	 * Removes the crud where uuid = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the crud that was removed
+	 */
+	public static CRUD removeByUUID_G(String uuid, long groupId)
+		throws crud.backend.exception.NoSuchUDException {
+
+		return getPersistence().removeByUUID_G(uuid, groupId);
+	}
+
+	/**
+	 * Returns the number of cruds where uuid = &#63; and groupId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the number of matching cruds
+	 */
+	public static int countByUUID_G(String uuid, long groupId) {
+		return getPersistence().countByUUID_G(uuid, groupId);
+	}
+
+	/**
+	 * Returns all the cruds where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the matching cruds
+	 */
+	public static List<CRUD> findByG_G(long groupId) {
+		return getPersistence().findByG_G(groupId);
+	}
+
+	/**
+	 * Returns a range of all the cruds where groupId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CRUDModelImpl</code>.
 	 * </p>
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param start the lower bound of the range of cruds
 	 * @param end the upper bound of the range of cruds (not inclusive)
 	 * @return the range of matching cruds
 	 */
-	public static List<CRUD> findByG_G(long crudId, int start, int end) {
-		return getPersistence().findByG_G(crudId, start, end);
+	public static List<CRUD> findByG_G(long groupId, int start, int end) {
+		return getPersistence().findByG_G(groupId, start, end);
 	}
 
 	/**
-	 * Returns an ordered range of all the cruds where crudId = &#63;.
+	 * Returns an ordered range of all the cruds where groupId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CRUDModelImpl</code>.
 	 * </p>
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param start the lower bound of the range of cruds
 	 * @param end the upper bound of the range of cruds (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching cruds
 	 */
 	public static List<CRUD> findByG_G(
-		long crudId, int start, int end,
+		long groupId, int start, int end,
 		OrderByComparator<CRUD> orderByComparator) {
 
 		return getPersistence().findByG_G(
-			crudId, start, end, orderByComparator);
+			groupId, start, end, orderByComparator);
 	}
 
 	/**
-	 * Returns an ordered range of all the cruds where crudId = &#63;.
+	 * Returns an ordered range of all the cruds where groupId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CRUDModelImpl</code>.
 	 * </p>
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param start the lower bound of the range of cruds
 	 * @param end the upper bound of the range of cruds (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -338,86 +401,104 @@ public class CRUDUtil {
 	 * @return the ordered range of matching cruds
 	 */
 	public static List<CRUD> findByG_G(
-		long crudId, int start, int end,
+		long groupId, int start, int end,
 		OrderByComparator<CRUD> orderByComparator, boolean useFinderCache) {
 
 		return getPersistence().findByG_G(
-			crudId, start, end, orderByComparator, useFinderCache);
+			groupId, start, end, orderByComparator, useFinderCache);
 	}
 
 	/**
-	 * Returns the first crud in the ordered set where crudId = &#63;.
+	 * Returns the first crud in the ordered set where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching crud
 	 * @throws NoSuchUDException if a matching crud could not be found
 	 */
 	public static CRUD findByG_G_First(
-			long crudId, OrderByComparator<CRUD> orderByComparator)
+			long groupId, OrderByComparator<CRUD> orderByComparator)
 		throws crud.backend.exception.NoSuchUDException {
 
-		return getPersistence().findByG_G_First(crudId, orderByComparator);
+		return getPersistence().findByG_G_First(groupId, orderByComparator);
 	}
 
 	/**
-	 * Returns the first crud in the ordered set where crudId = &#63;.
+	 * Returns the first crud in the ordered set where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching crud, or <code>null</code> if a matching crud could not be found
 	 */
 	public static CRUD fetchByG_G_First(
-		long crudId, OrderByComparator<CRUD> orderByComparator) {
+		long groupId, OrderByComparator<CRUD> orderByComparator) {
 
-		return getPersistence().fetchByG_G_First(crudId, orderByComparator);
+		return getPersistence().fetchByG_G_First(groupId, orderByComparator);
 	}
 
 	/**
-	 * Returns the last crud in the ordered set where crudId = &#63;.
+	 * Returns the last crud in the ordered set where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching crud
 	 * @throws NoSuchUDException if a matching crud could not be found
 	 */
 	public static CRUD findByG_G_Last(
-			long crudId, OrderByComparator<CRUD> orderByComparator)
+			long groupId, OrderByComparator<CRUD> orderByComparator)
 		throws crud.backend.exception.NoSuchUDException {
 
-		return getPersistence().findByG_G_Last(crudId, orderByComparator);
+		return getPersistence().findByG_G_Last(groupId, orderByComparator);
 	}
 
 	/**
-	 * Returns the last crud in the ordered set where crudId = &#63;.
+	 * Returns the last crud in the ordered set where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching crud, or <code>null</code> if a matching crud could not be found
 	 */
 	public static CRUD fetchByG_G_Last(
-		long crudId, OrderByComparator<CRUD> orderByComparator) {
+		long groupId, OrderByComparator<CRUD> orderByComparator) {
 
-		return getPersistence().fetchByG_G_Last(crudId, orderByComparator);
+		return getPersistence().fetchByG_G_Last(groupId, orderByComparator);
 	}
 
 	/**
-	 * Removes all the cruds where crudId = &#63; from the database.
+	 * Returns the cruds before and after the current crud in the ordered set where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param crudId the primary key of the current crud
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next crud
+	 * @throws NoSuchUDException if a crud with the primary key could not be found
 	 */
-	public static void removeByG_G(long crudId) {
-		getPersistence().removeByG_G(crudId);
+	public static CRUD[] findByG_G_PrevAndNext(
+			long crudId, long groupId,
+			OrderByComparator<CRUD> orderByComparator)
+		throws crud.backend.exception.NoSuchUDException {
+
+		return getPersistence().findByG_G_PrevAndNext(
+			crudId, groupId, orderByComparator);
 	}
 
 	/**
-	 * Returns the number of cruds where crudId = &#63;.
+	 * Removes all the cruds where groupId = &#63; from the database.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
+	 */
+	public static void removeByG_G(long groupId) {
+		getPersistence().removeByG_G(groupId);
+	}
+
+	/**
+	 * Returns the number of cruds where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
 	 * @return the number of matching cruds
 	 */
-	public static int countByG_G(long crudId) {
-		return getPersistence().countByG_G(crudId);
+	public static int countByG_G(long groupId) {
+		return getPersistence().countByG_G(groupId);
 	}
 
 	/**

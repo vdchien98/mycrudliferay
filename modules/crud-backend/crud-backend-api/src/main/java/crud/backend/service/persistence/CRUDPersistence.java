@@ -184,53 +184,103 @@ public interface CRUDPersistence extends BasePersistence<CRUD> {
 	public int countByUuid(String uuid);
 
 	/**
-	 * Returns all the cruds where crudId = &#63;.
+	 * Returns the crud where uuid = &#63; and groupId = &#63; or throws a <code>NoSuchUDException</code> if it could not be found.
 	 *
-	 * @param crudId the crud ID
-	 * @return the matching cruds
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the matching crud
+	 * @throws NoSuchUDException if a matching crud could not be found
 	 */
-	public java.util.List<CRUD> findByG_G(long crudId);
+	public CRUD findByUUID_G(String uuid, long groupId)
+		throws NoSuchUDException;
 
 	/**
-	 * Returns a range of all the cruds where crudId = &#63;.
+	 * Returns the crud where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the matching crud, or <code>null</code> if a matching crud could not be found
+	 */
+	public CRUD fetchByUUID_G(String uuid, long groupId);
+
+	/**
+	 * Returns the crud where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching crud, or <code>null</code> if a matching crud could not be found
+	 */
+	public CRUD fetchByUUID_G(
+		String uuid, long groupId, boolean useFinderCache);
+
+	/**
+	 * Removes the crud where uuid = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the crud that was removed
+	 */
+	public CRUD removeByUUID_G(String uuid, long groupId)
+		throws NoSuchUDException;
+
+	/**
+	 * Returns the number of cruds where uuid = &#63; and groupId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the number of matching cruds
+	 */
+	public int countByUUID_G(String uuid, long groupId);
+
+	/**
+	 * Returns all the cruds where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the matching cruds
+	 */
+	public java.util.List<CRUD> findByG_G(long groupId);
+
+	/**
+	 * Returns a range of all the cruds where groupId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CRUDModelImpl</code>.
 	 * </p>
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param start the lower bound of the range of cruds
 	 * @param end the upper bound of the range of cruds (not inclusive)
 	 * @return the range of matching cruds
 	 */
-	public java.util.List<CRUD> findByG_G(long crudId, int start, int end);
+	public java.util.List<CRUD> findByG_G(long groupId, int start, int end);
 
 	/**
-	 * Returns an ordered range of all the cruds where crudId = &#63;.
+	 * Returns an ordered range of all the cruds where groupId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CRUDModelImpl</code>.
 	 * </p>
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param start the lower bound of the range of cruds
 	 * @param end the upper bound of the range of cruds (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching cruds
 	 */
 	public java.util.List<CRUD> findByG_G(
-		long crudId, int start, int end,
+		long groupId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<CRUD>
 			orderByComparator);
 
 	/**
-	 * Returns an ordered range of all the cruds where crudId = &#63;.
+	 * Returns an ordered range of all the cruds where groupId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CRUDModelImpl</code>.
 	 * </p>
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param start the lower bound of the range of cruds
 	 * @param end the upper bound of the range of cruds (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -238,77 +288,92 @@ public interface CRUDPersistence extends BasePersistence<CRUD> {
 	 * @return the ordered range of matching cruds
 	 */
 	public java.util.List<CRUD> findByG_G(
-		long crudId, int start, int end,
+		long groupId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<CRUD>
 			orderByComparator,
 		boolean useFinderCache);
 
 	/**
-	 * Returns the first crud in the ordered set where crudId = &#63;.
+	 * Returns the first crud in the ordered set where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching crud
 	 * @throws NoSuchUDException if a matching crud could not be found
 	 */
 	public CRUD findByG_G_First(
-			long crudId,
+			long groupId,
 			com.liferay.portal.kernel.util.OrderByComparator<CRUD>
 				orderByComparator)
 		throws NoSuchUDException;
 
 	/**
-	 * Returns the first crud in the ordered set where crudId = &#63;.
+	 * Returns the first crud in the ordered set where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching crud, or <code>null</code> if a matching crud could not be found
 	 */
 	public CRUD fetchByG_G_First(
-		long crudId,
+		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator<CRUD>
 			orderByComparator);
 
 	/**
-	 * Returns the last crud in the ordered set where crudId = &#63;.
+	 * Returns the last crud in the ordered set where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching crud
 	 * @throws NoSuchUDException if a matching crud could not be found
 	 */
 	public CRUD findByG_G_Last(
-			long crudId,
+			long groupId,
 			com.liferay.portal.kernel.util.OrderByComparator<CRUD>
 				orderByComparator)
 		throws NoSuchUDException;
 
 	/**
-	 * Returns the last crud in the ordered set where crudId = &#63;.
+	 * Returns the last crud in the ordered set where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching crud, or <code>null</code> if a matching crud could not be found
 	 */
 	public CRUD fetchByG_G_Last(
-		long crudId,
+		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator<CRUD>
 			orderByComparator);
 
 	/**
-	 * Removes all the cruds where crudId = &#63; from the database.
+	 * Returns the cruds before and after the current crud in the ordered set where groupId = &#63;.
 	 *
-	 * @param crudId the crud ID
+	 * @param crudId the primary key of the current crud
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next crud
+	 * @throws NoSuchUDException if a crud with the primary key could not be found
 	 */
-	public void removeByG_G(long crudId);
+	public CRUD[] findByG_G_PrevAndNext(
+			long crudId, long groupId,
+			com.liferay.portal.kernel.util.OrderByComparator<CRUD>
+				orderByComparator)
+		throws NoSuchUDException;
 
 	/**
-	 * Returns the number of cruds where crudId = &#63;.
+	 * Removes all the cruds where groupId = &#63; from the database.
 	 *
-	 * @param crudId the crud ID
+	 * @param groupId the group ID
+	 */
+	public void removeByG_G(long groupId);
+
+	/**
+	 * Returns the number of cruds where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
 	 * @return the number of matching cruds
 	 */
-	public int countByG_G(long crudId);
+	public int countByG_G(long groupId);
 
 	/**
 	 * Caches the crud in the entity cache if it is enabled.

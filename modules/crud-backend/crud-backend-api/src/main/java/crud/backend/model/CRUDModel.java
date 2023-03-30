@@ -69,6 +69,20 @@ public interface CRUDModel extends BaseModel<CRUD> {
 	public void setUuid(String uuid);
 
 	/**
+	 * Returns the group ID of this crud.
+	 *
+	 * @return the group ID of this crud
+	 */
+	public long getGroupId();
+
+	/**
+	 * Sets the group ID of this crud.
+	 *
+	 * @param groupId the group ID of this crud
+	 */
+	public void setGroupId(long groupId);
+
+	/**
 	 * Returns the crud ID of this crud.
 	 *
 	 * @return the crud ID of this crud

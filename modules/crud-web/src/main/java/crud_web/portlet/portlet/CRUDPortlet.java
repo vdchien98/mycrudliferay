@@ -10,6 +10,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -56,26 +57,35 @@ public class CRUDPortlet extends MVCPortlet {
 		long crudId = ParamUtil.getLong(request, "crudId");
 		System.out.println("xin chao " );
 		if(crudId > 0) {
-			
 			_entryLocalService.updateCRUD(crudId,name, department, phone, email, message, serviceContext);
-
-		            SessionMessages.add(request, "entryAdded");
-
-//		            response.setRenderParameter(
-//		                "guestbookId", Long.toString(guestbookId));
-
-		
+		            SessionMessages.add(request, "entryAdded");	
 		}else {
 			_entryLocalService.addCRUD(name, department, phone, email, message, serviceContext);
 			SessionMessages.add(request, "entryAdded");
 		}
-		
-
 	}
+//	public void deleteEntry(ActionRequest request, ActionResponse response) throws PortalException {
+//        long entryId = ParamUtil.getLong(request, "entryId");
+//        long guestbookId = ParamUtil.getLong(request, "guestbookId");
+//
+//        ServiceContext serviceContext = ServiceContextFactory.getInstance(
+//            Entry.class.getName(), request);
+//
+//        try {
+//
+//            response.setRenderParameter(
+//                "guestbookId", Long.toString(guestbookId));
+//
+//            _entryLocalService.deleteEntry(entryId, serviceContext);
+//        }
+//
+//        catch (Exception e) {
+//            Logger.getLogger(GuestbookPortlet.class.getName()).log(
+//                Level.SEVERE, null, e);
+//        }
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse)
-	        throws IOException, PortletException { 
-
+	        throws IOException, PortletException {
 	        super.render(renderRequest, renderResponse);
 	}
 	@Reference(unbind = "-")

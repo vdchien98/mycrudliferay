@@ -59,10 +59,12 @@ public class CRUDCacheModel implements CacheModel<CRUD>, Externalizable {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
+		sb.append(", groupId=");
+		sb.append(groupId);
 		sb.append(", crudId=");
 		sb.append(crudId);
 		sb.append(", name=");
@@ -91,6 +93,7 @@ public class CRUDCacheModel implements CacheModel<CRUD>, Externalizable {
 			crudImpl.setUuid(uuid);
 		}
 
+		crudImpl.setGroupId(groupId);
 		crudImpl.setCrudId(crudId);
 
 		if (name == null) {
@@ -137,6 +140,8 @@ public class CRUDCacheModel implements CacheModel<CRUD>, Externalizable {
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		uuid = objectInput.readUTF();
 
+		groupId = objectInput.readLong();
+
 		crudId = objectInput.readLong();
 		name = objectInput.readUTF();
 		department = objectInput.readUTF();
@@ -153,6 +158,8 @@ public class CRUDCacheModel implements CacheModel<CRUD>, Externalizable {
 		else {
 			objectOutput.writeUTF(uuid);
 		}
+
+		objectOutput.writeLong(groupId);
 
 		objectOutput.writeLong(crudId);
 
@@ -193,6 +200,7 @@ public class CRUDCacheModel implements CacheModel<CRUD>, Externalizable {
 	}
 
 	public String uuid;
+	public long groupId;
 	public long crudId;
 	public String name;
 	public String department;

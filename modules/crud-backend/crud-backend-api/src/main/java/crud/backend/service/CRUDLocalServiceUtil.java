@@ -219,6 +219,17 @@ public class CRUDLocalServiceUtil {
 		return getService().fetchCRUD(crudId);
 	}
 
+	/**
+	 * Returns the crud matching the UUID and group.
+	 *
+	 * @param uuid the crud's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching crud, or <code>null</code> if a matching crud could not be found
+	 */
+	public static CRUD fetchCRUDByUuidAndGroupId(String uuid, long groupId) {
+		return getService().fetchCRUDByUuidAndGroupId(uuid, groupId);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -234,6 +245,20 @@ public class CRUDLocalServiceUtil {
 	 */
 	public static CRUD getCRUD(long crudId) throws PortalException {
 		return getService().getCRUD(crudId);
+	}
+
+	/**
+	 * Returns the crud matching the UUID and group.
+	 *
+	 * @param uuid the crud's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching crud
+	 * @throws PortalException if a matching crud could not be found
+	 */
+	public static CRUD getCRUDByUuidAndGroupId(String uuid, long groupId)
+		throws PortalException {
+
+		return getService().getCRUDByUuidAndGroupId(uuid, groupId);
 	}
 
 	/**
@@ -258,6 +283,28 @@ public class CRUDLocalServiceUtil {
 	 */
 	public static int getCRUDsCount() {
 		return getService().getCRUDsCount();
+	}
+
+	public static List<CRUD> getEntries(long groupId, int start, int end)
+		throws SystemException {
+
+		return getService().getEntries(groupId, start, end);
+	}
+
+	public static List<CRUD> getEntriesCRUD(long groupId, int start, int end)
+		throws SystemException {
+
+		return getService().getEntriesCRUD(groupId, start, end);
+	}
+
+	public static List<CRUD> getEntriesCRUD(
+		long groupId, int start, int end, OrderByComparator<CRUD> obc) {
+
+		return getService().getEntriesCRUD(groupId, start, end, obc);
+	}
+
+	public static int getEntriesCRUDCount(long groupId) {
+		return getService().getEntriesCRUDCount(groupId);
 	}
 
 	public static

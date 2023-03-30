@@ -41,6 +41,7 @@ public class CRUDWrapper
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("uuid", getUuid());
+		attributes.put("groupId", getGroupId());
 		attributes.put("crudId", getCrudId());
 		attributes.put("name", getName());
 		attributes.put("department", getDepartment());
@@ -57,6 +58,12 @@ public class CRUDWrapper
 
 		if (uuid != null) {
 			setUuid(uuid);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
 		}
 
 		Long crudId = (Long)attributes.get("crudId");
@@ -129,6 +136,16 @@ public class CRUDWrapper
 	@Override
 	public String getEmail() {
 		return model.getEmail();
+	}
+
+	/**
+	 * Returns the group ID of this crud.
+	 *
+	 * @return the group ID of this crud
+	 */
+	@Override
+	public long getGroupId() {
+		return model.getGroupId();
 	}
 
 	/**
@@ -214,6 +231,16 @@ public class CRUDWrapper
 	@Override
 	public void setEmail(String email) {
 		model.setEmail(email);
+	}
+
+	/**
+	 * Sets the group ID of this crud.
+	 *
+	 * @param groupId the group ID of this crud
+	 */
+	@Override
+	public void setGroupId(long groupId) {
+		model.setGroupId(groupId);
 	}
 
 	/**

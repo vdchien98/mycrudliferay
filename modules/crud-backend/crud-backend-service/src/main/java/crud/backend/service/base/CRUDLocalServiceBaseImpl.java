@@ -242,6 +242,18 @@ public abstract class CRUDLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the crud matching the UUID and group.
+	 *
+	 * @param uuid the crud's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching crud, or <code>null</code> if a matching crud could not be found
+	 */
+	@Override
+	public CRUD fetchCRUDByUuidAndGroupId(String uuid, long groupId) {
+		return crudPersistence.fetchByUUID_G(uuid, groupId);
+	}
+
+	/**
 	 * Returns the crud with the primary key.
 	 *
 	 * @param crudId the primary key of the crud
@@ -326,6 +338,21 @@ public abstract class CRUDLocalServiceBaseImpl
 		throws PortalException {
 
 		return crudPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
+	/**
+	 * Returns the crud matching the UUID and group.
+	 *
+	 * @param uuid the crud's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching crud
+	 * @throws PortalException if a matching crud could not be found
+	 */
+	@Override
+	public CRUD getCRUDByUuidAndGroupId(String uuid, long groupId)
+		throws PortalException {
+
+		return crudPersistence.findByUUID_G(uuid, groupId);
 	}
 
 	/**

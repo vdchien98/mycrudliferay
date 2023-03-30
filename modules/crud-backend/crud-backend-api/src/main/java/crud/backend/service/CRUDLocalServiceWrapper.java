@@ -232,6 +232,20 @@ public class CRUDLocalServiceWrapper
 		return _crudLocalService.fetchCRUD(crudId);
 	}
 
+	/**
+	 * Returns the crud matching the UUID and group.
+	 *
+	 * @param uuid the crud's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching crud, or <code>null</code> if a matching crud could not be found
+	 */
+	@Override
+	public crud.backend.model.CRUD fetchCRUDByUuidAndGroupId(
+		String uuid, long groupId) {
+
+		return _crudLocalService.fetchCRUDByUuidAndGroupId(uuid, groupId);
+	}
+
 	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
@@ -251,6 +265,22 @@ public class CRUDLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _crudLocalService.getCRUD(crudId);
+	}
+
+	/**
+	 * Returns the crud matching the UUID and group.
+	 *
+	 * @param uuid the crud's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching crud
+	 * @throws PortalException if a matching crud could not be found
+	 */
+	@Override
+	public crud.backend.model.CRUD getCRUDByUuidAndGroupId(
+			String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _crudLocalService.getCRUDByUuidAndGroupId(uuid, groupId);
 	}
 
 	/**
@@ -279,6 +309,36 @@ public class CRUDLocalServiceWrapper
 	@Override
 	public int getCRUDsCount() {
 		return _crudLocalService.getCRUDsCount();
+	}
+
+	@Override
+	public java.util.List<crud.backend.model.CRUD> getEntries(
+			long groupId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return _crudLocalService.getEntries(groupId, start, end);
+	}
+
+	@Override
+	public java.util.List<crud.backend.model.CRUD> getEntriesCRUD(
+			long groupId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+
+		return _crudLocalService.getEntriesCRUD(groupId, start, end);
+	}
+
+	@Override
+	public java.util.List<crud.backend.model.CRUD> getEntriesCRUD(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator
+			<crud.backend.model.CRUD> obc) {
+
+		return _crudLocalService.getEntriesCRUD(groupId, start, end, obc);
+	}
+
+	@Override
+	public int getEntriesCRUDCount(long groupId) {
+		return _crudLocalService.getEntriesCRUDCount(groupId);
 	}
 
 	@Override
